@@ -4,34 +4,60 @@ import UIKit
 struct Records: Codable {
     let records: [Schedule]?
 }
+
+struct Records_speakers: Codable {
+    let records: [Speakers]?
+}
 struct Schedule: Codable {
     let id: String
     let fields: Fields
 }
+
+struct Speakers: Codable {
+    let id: String
+    let fields: Fields_speakers
+}
+
+
 struct Fields: Codable {
-    let name: String
-    let type: String?
-    let images: [FurnitureImage]?
+    let activity: String
+    let activity_type: String?
+    let start: String
+    let end: String
+    let location: String
+    let speakers: [String]?
     enum CodingKeys: String, CodingKey {
-        case name = "Name"
-        case type = "Type"
-        case images = "Images"
+        case activity = "Activity"
+        case activity_type = "Type"
+        case start = "Start"
+        case end = "End"
+        case location = "Location"
+        case speakers = "Speaker(s)"
     }
 }
-struct FurnitureImage: Codable {
-    let url: String
+
+struct Fields_speakers: Codable {
+    let name: String
+    let company: String
+    let role: String
+    let email: String
+    enum CodingKeys: String, CodingKey {
+        case name = "Name"
+        case company = "Company"
+        case role = "Role"
+        case email = "Email"
+    }
 }
+/*
 struct Response: Codable {
     let id: String
     let deleted: Bool
 }
 struct ErrorResponse: Codable {
     let error: String
-}
+}*/
 enum RequestType: String {
     case get = "GET"
-    case post = "POST"
-    case delete = "DELETE"
 }
 enum CustomError: Error {
     case requestError
@@ -42,12 +68,13 @@ enum CustomError: Error {
 protocol RequestFactoryProtocol {
     func createRequest(urlStr: String, requestType: RequestType, params:
                        [String]?) -> URLRequest
-    func getFurnitureList(callback: @escaping ((errorType: CustomError?,
+    func getScheduleList(callback: @escaping ((errorType: CustomError?,
                                                 errorMessage: String?), [Schedule]?) -> Void)
-    func deleteFurniture(with id: String, callback: @escaping ((errorType:
-                                                                    CustomError?, errorMessage: String?), Response?) -> Void)
+    func getSpeakersList(callback: @escaping ((errorType: CustomError?,
+                                               errorMessage: String?), [Speakers]?) -> Void)
 }
-private let furnitureUrlStr = "https://api.airtable.com/v0/appurgriHL535VVAP/Furniture"
+private let scheduleUrlStr = "https://api.airtable.com/v0/appLxCaCuYWnjaSKB/%F0%9F%93%86%20Schedule"
+private let speakersUrlStr = "https://api.airtable.com/v0/appLxCaCuYWnjaSKB/%F0%9F%8E%A4%20Speakers"
 
 class RequestFactory: RequestFactoryProtocol {
     internal func createRequest(urlStr: String, requestType: RequestType,
@@ -66,102 +93,129 @@ class RequestFactory: RequestFactoryProtocol {
         request.timeoutInterval = 100
         request.httpMethod = requestType.rawValue
 
-        let accessToken = "keyuGTkgeGQoidxs6"
+        let accessToken = "keymaCPSexfxC2hF9"
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
 
         return request
- }
-
- func getFurnitureList(callback: @escaping ((errorType: CustomError?,
-                                             errorMessage: String?), [Schedule]?) -> Void) {
-     let session = URLSession(configuration: .default)
-     let task = session.dataTask(with: createRequest(urlStr: furnitureUrlStr, requestType: .get, params: nil)) { (data, response, error)
-in
-         if let data = data, error == nil {
-             if let responseHttp = response as? HTTPURLResponse {
-                 if responseHttp.statusCode == 200 {
-                     if let response = try?
-                            JSONDecoder().decode(Records.self, from: data) {
-                         callback((nil, nil), response.records)
-                     }
-                     else {
-                         callback((CustomError.parsingError, "parsing error"), nil)
-                     }
-                 }
-                 else {
-                     callback((CustomError.statusCodeError, "status code: \(responseHttp.statusCode)"), nil)
-                 }
-             }
-         }
-         else {
-             callback((CustomError.requestError,
-                       error.debugDescription), nil)
-         }
-     }
-     task.resume()
- }
-
- func deleteFurniture(with id: String, callback: @escaping ((errorType:
-                                                                CustomError?, errorMessage: String?), Response?) -> Void) {
-     let session = URLSession(configuration: .default)
-     let task = session.dataTask(with: createRequest(urlStr: furnitureUrlStr, requestType: .delete, params: [id])) {
-         (data, response, error)
-in
-         if let data = data, error == nil {
-             if let responseHttp = response as? HTTPURLResponse {
-                 if responseHttp.statusCode == 200 {
-                     if let response = try?
-                            JSONDecoder().decode(Response.self, from: data) {
-                         callback((nil, nil), response)
-                     }
-                     else if let response = try?
-                                JSONDecoder().decode(ErrorResponse.self, from:
-                                                        data) {
-                         callback((CustomError.requestError,
-                                   response.error), nil)
-                     }
-                     else {
-                         callback((CustomError.parsingError, "parsing error"), nil)
-                     }
-                 }
-                 else {
-                     callback((CustomError.statusCodeError, "status code: \(responseHttp.statusCode)"), nil)
-                 }
-             }
-         }
-         else {
-             callback((CustomError.requestError,
-                       error.debugDescription), nil)
-         }
-     }
-     task.resume()
+        
     }
-}
 
+    func getScheduleList(callback: @escaping ((errorType: CustomError?,
+                                             errorMessage: String?), [Schedule]?) -> Void) {
+        let session = URLSession(configuration: .default)
+        let task = session.dataTask(with: createRequest(urlStr: scheduleUrlStr, requestType: .get, params: nil)) {
+            (data, response, error)
+            in
+            if let data = data, error == nil {
+                if let responseHttp = response as? HTTPURLResponse {
+                    if responseHttp.statusCode == 200 {
+                        let decoder = JSONDecoder()
+                        /*let dateFormatter = DateFormatter()
+                        dateFormatter.timeZone = TimeZone.current
+                        dateFormatter.locale = Locale(identifier: "fr-FR-POSIX")
+                        dateFormatter.dateFormat = "d/M/yyyy HH:mma"
+                        decoder.dateDecodingStrategy = .formatted(dateFormatter)*/
+                        if let response = try?decoder.decode(Records.self, from: data) {
+                            callback((nil, nil), response.records)
+                        }
+                        else {
+                            callback((CustomError.parsingError, "parsing error"), nil)
+                        }
+                    }
+                    else {
+                        callback((CustomError.statusCodeError, "status code: \(responseHttp.statusCode)"), nil)
+                    }
+                }
+            }
+            else {
+                callback((CustomError.requestError,
+                       error.debugDescription), nil)
+            }
+        }
+        task.resume()
+    }
+    
+    func getSpeakersList(callback: @escaping ((errorType: CustomError?,
+                                               errorMessage: String?), [Speakers]?) -> Void) {
+        let session = URLSession(configuration: .default)
+        let task = session.dataTask(with: createRequest(urlStr: speakersUrlStr, requestType: .get, params: nil)) {
+            (data, response, error)
+            in
+            if let data = data, error == nil {
+                if let responseHttp = response as? HTTPURLResponse {
+                    if responseHttp.statusCode == 200 {
+                        let decoder = JSONDecoder()
+                        /*let dateFormatter = DateFormatter()
+                        dateFormatter.timeZone = TimeZone.current
+                        dateFormatter.locale = Locale(identifier: "fr-FR-POSIX")
+                        dateFormatter.dateFormat = "d/M/yyyy HH:mma"
+                        decoder.dateDecodingStrategy = .formatted(dateFormatter)*/
+                        if let response = try?decoder.decode(Records_speakers.self, from: data) {
+                            callback((nil, nil), response.records)
+                        }
+                        else {
+                            callback((CustomError.parsingError, "parsing error"), nil)
+                        }
+                    }
+                    else {
+                        callback((CustomError.statusCodeError, "status code: \(responseHttp.statusCode)"), nil)
+                    }
+                }
+            }
+            else {
+                callback((CustomError.requestError,
+                       error.debugDescription), nil)
+            }
+        }
+        task.resume()
+    }
+
+}
 // Controller
+
 let requestFactory = RequestFactory()
 
-requestFactory.getFurnitureList { (errorHandle, furnitures) in
+requestFactory.getScheduleList { (errorHandle, schedules) in
     if let _ = errorHandle.errorType, let errorMessage =
         errorHandle.errorMessage {
+        print("test")
         print(errorMessage)
     }
-    else if let list = furnitures, let furniture = list.last {
-        print(furniture.id)
+    else if let list = schedules, let _ = list.last {
+        /*for i in list {
+            print(i.fields.activity)
+        }*/
+        
+        print(list[7].fields.activity)
+        print(list[7].fields.activity_type)
+        print(list[7].fields.start)
+        print(list[7].fields.location)
+        print(list[0].fields.speakers![1])
+        //print(schedule.id)
     }
     else {
         print("Houston we got a problem")
     }
 }
-requestFactory.deleteFurniture(with: "rec00x6nIiwAmQjhB") { (errorHandle, response) in
+
+requestFactory.getSpeakersList { (errorHandle, speakers) in
     if let _ = errorHandle.errorType, let errorMessage =
         errorHandle.errorMessage {
+        print("test")
         print(errorMessage)
     }
-    else if let reponse = response {
-        print(reponse.deleted)
+    else if let list = speakers, let speaker = list.last {
+        print(list[7].fields.name)
+        print(list[7].fields.company)
+        print(speaker.id)
     }
     else {
         print("Houston we got a problem")
     }
 }
+
+        
+
+
+
+
