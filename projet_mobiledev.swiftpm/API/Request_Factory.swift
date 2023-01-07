@@ -53,7 +53,6 @@ class RequestFactory: RequestFactoryProtocol {
             (data, response, error)
             in
             if let data = data, error == nil {
-                print("getScheduleList_1")
                 if let responseHttp = response as? HTTPURLResponse {
                     if responseHttp.statusCode == 200 {
                         let decoder = JSONDecoder()

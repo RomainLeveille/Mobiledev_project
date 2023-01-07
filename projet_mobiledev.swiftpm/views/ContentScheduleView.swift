@@ -23,7 +23,6 @@ struct ContentScheduleView: View {
 
     func getSchedules() {
         let requestFactory = RequestFactory()
-        print("getSchedules_1")
         requestFactory.getScheduleList { (error, schedules) in
             if let schedules = schedules {
                 self.schedules = schedules
