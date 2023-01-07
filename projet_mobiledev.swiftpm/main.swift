@@ -1,6 +1,70 @@
 import Foundation
 import UIKit
+
+
+// Controller
+
+let requestFactory = RequestFactory()
+
+requestFactory.getScheduleList { (errorHandle, schedules) in
+    if let _ = errorHandle.errorType, let errorMessage =
+        errorHandle.errorMessage {
+        print(errorMessage)
+    }
+    else if let data = schedules, let schedule = data.last {
+        //print(data)
+        /*for i in data {
+         print(i, "\n")
+         }*/
+        let scheduleList = requestFactory.scheduleList
+        print(scheduleList)
+        /*print(data[7].fields.activity)
+         print(data[7].fields.activity_type)
+         print(data[7].fields.start)
+         print(data[7].fields.location)
+         */
+        //print(data[0].fields.speakers!)
+        
+        //.print(schedule.id)
+    }
+    else {
+        print("Houston we got a problem")
+    }
+}
+
+requestFactory.getSpeakersList { (errorHandle, speakers) in
+    if let _ = errorHandle.errorType, let errorMessage =
+        errorHandle.errorMessage {
+        print(errorMessage)
+    }
+    else if let data = speakers, let speaker = data.last {
+        let ids = ["recMsLQRE21DymLru", "recZiktUiwP9vbESR", "recvOjtvCrpGN8cn5"]
+        /*for i in data {
+         print( i.id)
+         }*/
+        /*
+         print(data[7].fields.name)
+         print(data[7].fields.company)
+         print(speaker.id)
+         */
+        /*for i in data {
+         if ids.contains(i.id){
+         print (i.fields.name)
+         }
+         }*/
+    }
+    else {
+        print("Houston we got a problem")
+    }
+}
+
+
+
+
+
+
 // Model
+/*
 struct Records: Codable {
     let records: [Schedule]?
 }
@@ -64,7 +128,9 @@ enum CustomError: Error {
     case statusCodeError
     case parsingError
 }
+ */
 // Request Factory
+/*
 protocol RequestFactoryProtocol {
     func createRequest(urlStr: String, requestType: RequestType, params:
                        [String]?) -> URLRequest
@@ -174,61 +240,8 @@ class RequestFactory: RequestFactoryProtocol {
     }
     
 }
-// Controller
+ */
 
-let requestFactory = RequestFactory()
-
-requestFactory.getScheduleList { (errorHandle, schedules) in
-    if let _ = errorHandle.errorType, let errorMessage =
-        errorHandle.errorMessage {
-        print(errorMessage)
-    }
-    else if let data = schedules, let schedule = data.last {
-        //print(data)
-        /*for i in data {
-         print(i, "\n")
-         }*/
-        let scheduleList = requestFactory.scheduleList
-        print(scheduleList)
-        /*print(data[7].fields.activity)
-         print(data[7].fields.activity_type)
-         print(data[7].fields.start)
-         print(data[7].fields.location)
-         */
-        //print(data[0].fields.speakers!)
-        
-        //.print(schedule.id)
-    }
-    else {
-        print("Houston we got a problem")
-    }
-}
-
-requestFactory.getSpeakersList { (errorHandle, speakers) in
-    if let _ = errorHandle.errorType, let errorMessage =
-        errorHandle.errorMessage {
-        print(errorMessage)
-    }
-    else if let data = speakers, let speaker = data.last {
-        let ids = ["recMsLQRE21DymLru", "recZiktUiwP9vbESR", "recvOjtvCrpGN8cn5"]
-        /*for i in data {
-         print( i.id)
-         }*/
-        /*
-         print(data[7].fields.name)
-         print(data[7].fields.company)
-         print(speaker.id)
-         */
-        /*for i in data {
-         if ids.contains(i.id){
-         print (i.fields.name)
-         }
-         }*/
-    }
-    else {
-        print("Houston we got a problem")
-    }
-}
 
 //requestFactory.getScheduleList(callback: <#T##((errorType: CustomError?, errorMessage: String?), [Schedule]?) -> Void#>)
 //print(test)
