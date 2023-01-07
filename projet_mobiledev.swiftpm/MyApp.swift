@@ -1,4 +1,4 @@
-import SwiftUI
+/*import SwiftUI
 
 @main
 struct MyApp: App {
@@ -8,3 +8,4 @@ struct MyApp: App {
         }
     }
 }
+*/
