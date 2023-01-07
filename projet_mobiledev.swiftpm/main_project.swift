@@ -2,8 +2,23 @@ import Foundation
 import UIKit
 
 
-// Controller
+import SwiftUI
 
+//print("MyApp is launched")
+@main
+struct MyApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentScheduleView()
+        }
+    }
+}
+//print("and here ?")
+
+
+
+// Controller
+/*
 let requestFactory = RequestFactory()
 
 requestFactory.getScheduleList { (errorHandle, schedules) in
@@ -57,7 +72,7 @@ requestFactory.getSpeakersList { (errorHandle, speakers) in
         print("Houston we got a problem")
     }
 }
-
+*/
 
 
 
