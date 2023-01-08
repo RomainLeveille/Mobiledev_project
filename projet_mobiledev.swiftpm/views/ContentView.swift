@@ -2,15 +2,23 @@
 import SwiftUI
 
 struct ContentView: View {
-    let schedule: Schedule
-    //let speakers: Speakers
+    var schedule: Schedule_speaker
+    //let speaker: Speakers
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text(schedule.fields.activity).font(.title)
-            Text(schedule.fields.location)
-            Text(schedule.fields.start)
-            Text(schedule.fields.end)
+            Text(schedule.activity).font(.title)
+            Text(schedule.location)
+            Text(schedule.start)
+            Text(schedule.end)
+            if let speakers = schedule.speakers {
+                Text(speakers)
+                //Text(speakers.joined(separator: ", "))
+            }
+            /*Text(speaker.fields.name)
+            Text(speaker.fields.company)
+            Text(speaker.fields.role)*/
+
         }
     }
 }

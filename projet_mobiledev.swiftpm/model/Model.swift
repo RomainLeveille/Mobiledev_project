@@ -20,6 +20,16 @@ struct Schedule: Codable {
     let fields: Fields
 }
 
+struct Schedule_speaker: Codable {
+    let id: String
+    let activity: String
+    let activity_type: String
+    let start: String
+    let end: String
+    let location: String
+    let speakers: String
+}
+
 struct Speakers: Codable {
     let id: String
     let fields: Fields_speakers
@@ -55,14 +65,7 @@ struct Fields_speakers: Codable {
         case email = "Email"
     }
 }
-/*
- struct Response: Codable {
- let id: String
- let deleted: Bool
- }
- struct ErrorResponse: Codable {
- let error: String
- }*/
+
 enum RequestType: String {
     case get = "GET"
 }
