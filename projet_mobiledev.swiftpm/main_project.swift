@@ -4,7 +4,6 @@ import UIKit
 
 import SwiftUI
 
-//print("MyApp is launched")
 @main
 struct MyApp: App {
     var body: some Scene {
@@ -13,5 +12,4 @@ struct MyApp: App {
         }
     }
 }
-//print("and here ?")
 

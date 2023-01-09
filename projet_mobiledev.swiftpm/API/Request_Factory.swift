@@ -56,11 +56,6 @@ class RequestFactory: RequestFactoryProtocol {
                 if let responseHttp = response as? HTTPURLResponse {
                     if responseHttp.statusCode == 200 {
                         let decoder = JSONDecoder()
-                        /*let dateFormatter = DateFormatter()
-                         dateFormatter.timeZone = TimeZone.current
-                         dateFormatter.locale = Locale(identifier: "fr-FR-POSIX")
-                         dateFormatter.dateFormat = "d/M/yyyy HH:mma"
-                         decoder.dateDecodingStrategy = .formatted(dateFormatter)*/
                         if let response = try?decoder.decode(Records.self, from: data) {
                             self.scheduleList = response.records
                             callback((nil, nil), response.records)
@@ -92,11 +87,6 @@ class RequestFactory: RequestFactoryProtocol {
                 if let responseHttp = response as? HTTPURLResponse {
                     if responseHttp.statusCode == 200 {
                         let decoder = JSONDecoder()
-                        /*let dateFormatter = DateFormatter()
-                         dateFormatter.timeZone = TimeZone.current
-                         dateFormatter.locale = Locale(identifier: "fr-FR-POSIX")
-                         dateFormatter.dateFormat = "d/M/yyyy HH:mma"
-                         decoder.dateDecodingStrategy = .formatted(dateFormatter)*/
                         if let response = try?decoder.decode(Records_speakers.self, from: data) {
                             callback((nil, nil), response.records)
                         }

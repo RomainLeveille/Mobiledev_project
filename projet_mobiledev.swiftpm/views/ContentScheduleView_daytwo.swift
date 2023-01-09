@@ -58,9 +58,8 @@ struct ContentScheduleView_daytwo: View {
             var count = 0
             for schedule in self.schedules {
                 count += 1
-                print("first")
+                
                 if let speakerIDs = schedule.fields.speakers {
-                    print(speakerIDs)
                     var names: [String] = []
                     for i in speakerIDs {
                         for sp in self.speakers {
