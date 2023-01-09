@@ -1,7 +1,7 @@
 Notre équipe est composé de 3 personnes :
 Romain LEVEILLE NIZEROLLE
 Martin RATTANAVAN 
-Sébastin TOURET
+Sébastien TOURET
 
 ## Introduction
 
