@@ -1,7 +1,8 @@
 
+
 import SwiftUI
 
-struct ContentView: View {
+struct ContentView_daytwo: View {
     var schedule: Schedule_speaker
     //let speaker: Speakers
 
@@ -28,23 +29,16 @@ struct ContentView: View {
 
 
 
-
-
-
-
-
-struct ContentViewSchedule_Previews: PreviewProvider {
+struct ContentViewSchedule_daytwo_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            ContentScheduleView()
+            ContentScheduleView_daytwo()
                 .environment(\.colorScheme, .dark)
                 .previewLayout(.fixed(width: 300, height: 70))
-            ContentScheduleView()
+            ContentScheduleView_daytwo()
                 .environment(\.colorScheme, .light)
                 .previewLayout(.fixed(width: 300, height: 70))
         }
     }
 }
- 
 
- 

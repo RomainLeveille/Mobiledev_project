@@ -1,7 +1,14 @@
+//
+//  ContentView_detail.swift
+//  projet_mobiledev
+//
+//  Created by user231762 on 1/9/23.
+//
 
+import Foundation
 import SwiftUI
 
-struct ContentView: View {
+struct ContentView_detail: View {
     var schedule: Schedule_speaker
     //let speaker: Speakers
 
@@ -25,26 +32,3 @@ struct ContentView: View {
         }
     }
 }
-
-
-
-
-
-
-
-
-struct ContentViewSchedule_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            ContentScheduleView()
-                .environment(\.colorScheme, .dark)
-                .previewLayout(.fixed(width: 300, height: 70))
-            ContentScheduleView()
-                .environment(\.colorScheme, .light)
-                .previewLayout(.fixed(width: 300, height: 70))
-        }
-    }
-}
- 
-
- 

@@ -2,7 +2,7 @@
 //  ContentScheduleView.swift
 //  projet_mobiledev
 //
-//  Created by user231762 on 1/7/23.
+//  Created by user231762 on 1/9/23.
 //
 
 import Foundation
@@ -10,7 +10,7 @@ import SwiftUI
 import Dispatch
 
 
-struct ContentScheduleView: View {
+struct ContentScheduleView_daytwo: View {
     
     @State private var schedules: [Schedule] = [] // comprends les données de la table Schedule
     @State private var speakers: [Speakers] = []  // comprends les données de la table Speakers
@@ -19,24 +19,17 @@ struct ContentScheduleView: View {
     var body: some View {
         
         NavigationView{
-            List(schedules_speakers.filter{ !$0.start.contains("-09") }, id: \.id) { item in
+            List(schedules_speakers.filter{ !$0.start.contains("-08") }, id: \.id) { item in
                 NavigationLink(destination: ContentView_detail(schedule: item)) {
-                    ContentView(schedule: item)
+                    ContentView_daytwo(schedule: item)
                 }
             }
 
+            .navigationBarTitle("Day Two")
             
-            .navigationBarTitle("Day One")
-            .navigationBarItems(trailing:
-                        HStack{
-                NavigationLink(destination:ContentScheduleView_daytwo()){
-                                Text("Day Two")
-                            }
-                        }
-            )
         }
         .onAppear(perform: getData)
-        
+
         
     }
 
