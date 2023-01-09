@@ -6,19 +6,16 @@ struct ContentView: View {
     //let speaker: Speakers
 
     var body: some View {
-        VStack(alignment: .leading) {
+        HStack(alignment: .center) {
             ScrollView{
+                let stringDebut = schedule.start
+                let subStringDebut = stringDebut[stringDebut.index(stringDebut.startIndex, offsetBy: 11)..<stringDebut.index(stringDebut.startIndex, offsetBy: 16)]
+                let stringFin = schedule.end
+                let subStringFin = stringFin[stringFin.index(stringFin.startIndex, offsetBy: 11)..<stringFin.index(stringFin.startIndex, offsetBy: 16)]
+                let timer = subStringDebut + " - " + subStringFin
                 Text(schedule.activity).font(.title)
-                Text(schedule.location)
-                Text(schedule.start)
-                Text(schedule.end)
-                if let speakers = schedule.speakers {
-                    Text(speakers)
-                    //Text(speakers.joined(separator: ", "))
-                }
-                /*Text(speaker.fields.name)
-                Text(speaker.fields.company)
-                Text(speaker.fields.role)*/
+                Text(schedule.activity_type)
+                Text(timer)
             }
             
 

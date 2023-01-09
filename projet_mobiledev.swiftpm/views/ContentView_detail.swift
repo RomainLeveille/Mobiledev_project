@@ -15,12 +15,17 @@ struct ContentView_detail: View {
     var body: some View {
         VStack(alignment: .leading) {
             ScrollView{
+                let stringDebut = schedule.start
+                let subStringDebut = stringDebut[stringDebut.index(stringDebut.startIndex, offsetBy: 11)..<stringDebut.index(stringDebut.startIndex, offsetBy: 16)]
+                let stringFin = schedule.end
+                let subStringFin = stringFin[stringFin.index(stringFin.startIndex, offsetBy: 11)..<stringFin.index(stringFin.startIndex, offsetBy: 16)]
+                let timer = subStringDebut + " - " + subStringFin
                 Text(schedule.activity).font(.title)
-                Text(schedule.location)
-                Text(schedule.start)
-                Text(schedule.end)
-                if let speakers = schedule.speakers {
-                    Text(speakers)
+                Text("type of activity :  \(schedule.activity_type)")
+                Text("room : \(schedule.location)")
+                Text("Time : " + timer)
+                if schedule.speakers != "nil"{
+                    Text("speakers : \(schedule.speakers)")
                     //Text(speakers.joined(separator: ", "))
                 }
                 /*Text(speaker.fields.name)
