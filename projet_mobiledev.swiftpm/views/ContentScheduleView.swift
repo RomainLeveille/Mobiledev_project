@@ -12,24 +12,13 @@ import Dispatch
 
 struct ContentScheduleView: View {
     
-    @State private var schedules: [Schedule] = []
-    @State private var speakers: [Speakers] = []
-    @State private var schedules_speakers: [Schedule_speaker] = []
+    @State private var schedules: [Schedule] = [] // comprends les données de la table Schedule
+    @State private var speakers: [Speakers] = []  // comprends les données de la table Speakers
+    @State private var schedules_speakers: [Schedule_speaker] = []  // comprends les données de la table Schedule en ayant remplacé la colonne speaker(s) par les names venant de la table Speakers au lieu des id associés.
     
     var body: some View {
         
-        /*let scheduleSpeakers = zip(schedules, speakers).map { (schedule, speaker) in
-                    (schedule: schedule, speaker: speaker)
-        }
-                
-                // Affichez une liste de vues pour chaque objet de ce tableau
-        List(scheduleSpeakers, id: \.schedule.id) { scheduleSpeaker in
-                    ContentView(schedule: scheduleSpeaker.schedule, speaker: scheduleSpeaker.speaker)
-        }
-        */
-        /*List(schedules, id: \.id) { schedule in
-            ContentView(schedule: schedule)
-        }*/
+        
         List(schedules_speakers, id: \.id) { item in
             ContentView(schedule: item)
         }
@@ -38,25 +27,27 @@ struct ContentScheduleView: View {
     }
 
     func getData() {
-        var requestFactory = RequestFactory()
-        var group = DispatchGroup()
+        let requestFactory = RequestFactory()
+        let group = DispatchGroup()
+        
+        
         
         group.enter()
         requestFactory.getScheduleList { (error, schedules) in
-            if var schedules = schedules {
+            if let schedules = schedules {
                 self.schedules = schedules
             }
             group.leave()
         }
         group.enter()
         requestFactory.getSpeakersList { (error, speakers) in
-            if var speakers = speakers {
+            if let speakers = speakers {
                 self.speakers = speakers
             }
             group.leave()
         }
         
-        group.notify(queue: .main) {
+        group.notify(queue: .main) {  // Permet de créer une nouvelle liste de dictionnaires qui contiendra les données de la table schedule + les noms des speakers (au lieu des id)
             var count = 0
             for schedule in self.schedules {
                 count += 1
@@ -71,9 +62,7 @@ struct ContentScheduleView: View {
                             }
                         }
                     }
-                    /*let newItem = Schedule_speaker(id: 1, activity: schedule.fields.activity, activity_type: schedule.fields.activity_type!, start: schedule.fields.start, end: schedule.fields.end, location: schedule.fields.location, speakers: names.joined(separator: ", "))
-                    schedules_speakers.append(newItem)*/
-                    
+                   
                     let newItem = ["id": String(count), "activity": schedule.fields.activity, "activity_type": schedule.fields.activity_type!, "start": schedule.fields.start, "end": schedule.fields.end, "location": schedule.fields.location, "speakers": names.joined(separator: ", ")]
 
                     let data = try! JSONEncoder().encode(newItem)
@@ -92,20 +81,21 @@ struct ContentScheduleView: View {
                     schedules_speakers.append(scheduleSpeaker)
                     
 
-                    
-                    /*schedules_speakers.append(["id": 1, "activity": schedule.fields.activity,"activity_type": schedule.fields.activity_type, "start": schedule.fields.start, "end": schedule.fields.end, "location": schedule.fields.location])*/
                 }
             }
+            
+            // Permet de trier les dates par ordre croissant
+            
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
 
-            /*schedules_speakers.sort { (dict1, dict2) -> Bool in
-                let dateString1 = dict1["start"] as! String
-                let dateString2 = dict2["start"] as! String
+            schedules_speakers.sort { (dict1, dict2) -> Bool in
+                let dateString1 = dict1.start
+                let dateString2 = dict2.start
                 let date1 = dateFormatter.date(from: dateString1)!
                 let date2 = dateFormatter.date(from: dateString2)!
                 return date1 < date2
-            }*/
+            }
         }
     }
 }
